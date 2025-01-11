@@ -3,25 +3,19 @@ const path = require('path');
 const glob = require('glob');
 const { config } = require('./table-check.config');
 
-
-
-function isAllowedFile(filePath: any): boolean {
-  return config.allowedFiles.some((allowed: string) =>
-    filePath.endsWith(allowed)
-  );
+function isAllowedFile(filePath) {
+  return config.allowedFiles.some(allowed => filePath.endsWith(allowed));
 }
 
-function checkFile(filePath: string): string[] {
-  const violations: string[] = [];
+function checkFile(filePath) {
+  const violations = [];
   const content = fs.readFileSync(filePath, 'utf-8');
 
-  // Skip allowed files
   if (isAllowedFile(filePath)) {
     return violations;
   }
 
-  // Check for table usage patterns
-  config.tablePatterns.forEach((pattern: string) => {
+  config.tablePatterns.forEach(pattern => {
     if (content.includes(pattern)) {
       violations.push(
         `File ${filePath} contains unauthorized table usage: ${pattern}`
@@ -32,17 +26,17 @@ function checkFile(filePath: string): string[] {
   return violations;
 }
 
-function main(): void {
+function main() {
   try {
     const srcPath = path.join(process.cwd(), 'src');
-    const files: string[] = glob.sync('**/*.{ts,html}', {
+    const files = glob.sync('**/*.{ts,html}', {
       cwd: srcPath,
       ignore: ['**/node_modules/**', '**/dist/**'],
     });
 
-    const allViolations: string[] = [];
+    const allViolations = [];
 
-    files.forEach((file: string) => {
+    files.forEach(file => {
       const fullPath = path.join(srcPath, file);
       const fileViolations = checkFile(fullPath);
       allViolations.push(...fileViolations);
@@ -50,7 +44,7 @@ function main(): void {
 
     if (allViolations.length > 0) {
       console.error('\x1b[31m%s\x1b[0m', '❌ Table usage violations found:');
-      allViolations.forEach((violation: string) => {
+      allViolations.forEach(violation => {
         console.error('\x1b[31m%s\x1b[0m', violation);
       });
       process.exit(1);
@@ -58,7 +52,7 @@ function main(): void {
       console.log('\x1b[32m%s\x1b[0m', '✅ No unauthorized table usage found');
       process.exit(0);
     }
-  } catch (error: unknown) {
+  } catch (error) {
     console.error(
       '\x1b[31m%s\x1b[0m',
       '❌ Error running table usage check:',
@@ -68,4 +62,4 @@ function main(): void {
   }
 }
 
-main();
+main(); 

@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "check-table-usage": "ts-node scripts/check-table-usage.ts",
+    "check-table-usage": "node scripts/check-table-usage.js",
     "precommit": "npm run check-table-usage"
   },
   "private": true,
