@@ -1,12 +1,26 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MenubarModule
+  ]
 })
 export class AppComponent {
-  title = 'framework-poc';
+  menuItems: MenuItem[] = [
+    {
+      label: 'Users',
+      icon: 'pi pi-users',
+      routerLink: ['/users']
+    }
+    // Add more menu items here as needed
+  ];
 }
